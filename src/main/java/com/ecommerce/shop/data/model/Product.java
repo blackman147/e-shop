@@ -1,9 +1,12 @@
 package com.ecommerce.shop.data.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Data
 public class Product {
 
     @Id
@@ -13,7 +16,9 @@ public class Product {
     @Column(nullable = false)
     private String name;
     private Double price;
-    private String currency;
+    @Enumerated(EnumType.STRING)
+    private Currency currency;
+    @Column(length = 500)
     private String details;
     @ElementCollection
     private List<String> imageUrl;
