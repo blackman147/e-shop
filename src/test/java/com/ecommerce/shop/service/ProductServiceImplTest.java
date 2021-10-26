@@ -2,33 +2,39 @@ package com.ecommerce.shop.service;
 
 import com.ecommerce.shop.data.model.Product;
 import com.ecommerce.shop.data.repository.ProductRepository;
-import org.junit.jupiter.api.BeforeEach;
+import com.ecommerce.shop.dto.ProductDto;
+import com.ecommerce.shop.web.exception.ProductDoesNotExistException;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
-class ProductServiceImplTest {
+@SpringBootTest
+@Sql(scripts = {"/db/insert.sql"})
+public class ProductServiceImplTest {
 
-    @Mock
-    ProductRepository productRepository;
-    @InjectMocks
+    @Autowired
     ProductService productServiceImpl;
 
-    @BeforeEach
-    void setUp() {
-        productServiceImpl = new ProductServiceImpl();
-        MockitoAnnotations.openMocks(this);
-    }
+    @Autowired
+    ProductRepository productRepository;
 
     @Test
-    void saveProductMockTest(){
-        Product product = new Product();
-        when(productServiceImpl.save(product)).thenReturn(product);
-        productServiceImpl.save(product);
-        verify(productRepository, times(1)).save(product);
+    void updateProductTest() throws ProductDoesNotExistException {
+        Product product = productRepository.findById(110l).orElse(null);
+        assertThat(product).isNotNull();
+        assertThat(product.getName()).isEqualTo("luxury sofa");
+
+        ProductDto productDto = new ProductDto();
+        productDto.setName("mexican chair");
+
+//        call the service update method
+        product = productServiceImpl.update(110l, productDto);
+        assertThat(product.getName()).isEqualTo(productDto.getName());
+        assertThat(product.getPrice()).isEqualTo(4500);
+
     }
+
 }

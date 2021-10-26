@@ -1,7 +1,7 @@
 package com.ecommerce.shop.data.model;
 
 public enum Currency {
-    NGN("Naira"), USD("Dollar"), SGD("Singapore Dollar"), GBP("Pounds"), FRC("Francs"), GHC("Cedis");
+    NGN("Naira"), USD("Dollar"), SDG("Singapore Dollar"), GBP("Pounds"), FRC("Francs"), GHC("Cedis");
 
     private String name;
 
